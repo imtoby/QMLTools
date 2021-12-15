@@ -2,6 +2,9 @@ import QtQuick 2.12
 
 Item {
     id: id_base_converter
+
+    property int currentSourceBase: 10
+
     Rectangle {
         anchors.fill: parent
         anchors.topMargin: 40
@@ -24,7 +27,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 font.pixelSize: 20
-                font.weight: 600
+                font.weight: Font.DemiBold
 
                 text: qsTr("Base Converter")
             }
@@ -116,7 +119,7 @@ Item {
         id: id_source_bases_menu
         Rectangle {
             implicitWidth: 120
-            implicitHeight: 120
+            implicitHeight: id_menu_container.height + 20
             color: "#9C9C9C"
             radius: 6
 
@@ -127,16 +130,26 @@ Item {
             }
 
             Column {
-                anchors.fill: parent
-                anchors.margins: 10
+                id: id_menu_container
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
 
                 Repeater {
                     model: sourceBaseModel
-                    Text {
-                        id: id_current_base
-                        text: model.modelData.name
-                        color: "#FFFFFF"
-                        height: 24
+                    MouseArea {
+                        width: id_menu_container.width
+                        height: 30
+                        Text {
+                            text: model.modelData.name
+                            color: "#FFFFFF"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        onClicked: {
+                            currentSourceBase = model.modelData.value
+                            id_current_base.text = model.modelData.name
+                        }
                     }
                 }
             }
